@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '@/components/molecules/Header';
 import Main from '@/components/molecules/Main';
 import { NewsBlock } from '@/components/molecules/NewsBlock';
-import Btn from '@/components/atoms/Btn';
+import Btn from '~/src/components/atoms/Button';
 import { ImgList } from '~/resource/ImgList';
 
 const Home: React.FC = () => {

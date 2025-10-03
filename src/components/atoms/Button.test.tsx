@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import Btn from 'src/components/atoms/Btn';
+import Btn from '~/src/components/atoms/Button';
 
 describe('Rendering', () => {
   it('Should render link elements correctly', () => {
@@ -8,4 +8,3 @@ describe('Rendering', () => {
     expect(screen.getByRole('link').textContent).toEqual('一覧へ');
   });
 });
-
