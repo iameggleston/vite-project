@@ -1,16 +1,47 @@
-const nextJest = require('next/jest');
+export default {
+  // テスト環境
+  testEnvironment: 'jsdom',
 
-const createJestConfig = nextJest({
-  // next.config.jsとテスト環境用の.envファイルが配置されたディレクトリをセット
-  dir: './',
-});
+  // テストファイルのパターン
+  testMatch: [
+    '**/__tests__/**/*.(js|jsx|ts|tsx)',
+    '**/*.(test|spec).(js|jsx|ts|tsx)',
+  ],
 
-// Jestのカスタム設定を設置する場所。従来のプロパティはここで定義
-const customJestConfig = {
-  // 各テストを実行する前に、さらにセットアップオプションを追加する
+  // モジュールの解決設定
+  moduleNameMapping: {
+    '^~/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      'jest-transform-stub',
+  },
+
+  // モジュールディレクトリ
   moduleDirectories: ['node_modules', '<rootDir>/'],
-  testEnvironment: 'jest-environment-jsdom',
-};
 
-// createJestConfigを定義することによって、本ファイルで定義された設定がNext.jsの設定に反映される
-module.exports = createJestConfig(customJestConfig);
+  // セットアップファイル
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+
+  // トランスフォーム設定
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  },
+
+  // モジュールファイル拡張子
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+
+  // カバレッジ設定
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/main.tsx',
+    '!src/vite-env.d.ts',
+  ],
+
+  // カバレッジディレクトリ
+  coverageDirectory: 'coverage',
+
+  // カバレッジレポート形式
+  coverageReporters: ['text', 'lcov', 'html'],
+};
