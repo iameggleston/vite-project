@@ -1,6 +1,4 @@
-import { screen } from '@testing-library/react';
-
-import reducer, { getNews } from 'redux/NewsSlice';
+import reducer, { getNews } from './NewsSlice';
 
 describe('extraReducers', () => {
   it('Should output news state + payload when fulfilled', () => {
@@ -13,8 +11,9 @@ describe('extraReducers', () => {
       payload: { title: 'test test' },
     };
     const state = reducer(initialState, action);
-    expect(state.news.title).toEqual('test test');
+    expect(state.news[0].title).toEqual('test test');
   });
+
   it('Should output error state + payload when rejected', () => {
     const initialState = {
       news: [],
@@ -27,4 +26,3 @@ describe('extraReducers', () => {
     expect(state.error).toEqual(true);
   });
 });
-

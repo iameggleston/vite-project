@@ -9,7 +9,7 @@ export default {
   ],
 
   // モジュールの解決設定
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
