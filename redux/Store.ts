@@ -4,13 +4,13 @@ import {
   TypedUseSelectorHook,
 } from 'react-redux';
 
-import countReducer from './CountSlice';
+import countReducer from './CounterSlice';
 import newsReducer from './NewsSlice';
 
 export const store = configureStore({
   reducer: {
     news: newsReducer,
-    counter: countReducer
+    counter: countReducer,
   },
 });
 
