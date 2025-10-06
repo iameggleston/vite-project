@@ -1,28 +1,42 @@
 import reducer, { getNews } from './NewsSlice';
 
 describe('extraReducers', () => {
-  it('Should output news state + payload when fulfilled', () => {
+  it('Should set articles from payload when fulfilled', () => {
     const initialState = {
-      news: [],
-      error: false,
+      articles: [],
+      status: 'error',
+      totalResults: 0,
     };
     const action = {
       type: getNews.fulfilled.type,
-      payload: { title: 'test test' },
-    };
-    const state = reducer(initialState, action);
-    expect(state.news[0].title).toEqual('test test');
+      payload: [
+        {
+          source: { id: null, name: 'Example' },
+          author: 'Author',
+          title: 'test test',
+          description: 'desc',
+          url: 'https://example.com',
+          urlToImage: 'https://example.com/img.jpg',
+          publishedAt: '2025-10-06T00:00:00Z',
+          content: 'content',
+        },
+      ],
+    } as const;
+    const state = reducer(initialState as any, action as any);
+    expect(state.articles[0].title).toEqual('test test');
+    expect(state.status).toEqual('ok');
   });
 
-  it('Should output error state + payload when rejected', () => {
+  it('Should set status to error when rejected', () => {
     const initialState = {
-      news: [],
-      error: false,
+      articles: [],
+      status: 'ok',
+      totalResults: 0,
     };
     const action = {
       type: getNews.rejected.type,
-    };
-    const state = reducer(initialState, action);
-    expect(state.error).toEqual(true);
+    } as const;
+    const state = reducer(initialState as any, action as any);
+    expect(state.status).toEqual('error');
   });
 });

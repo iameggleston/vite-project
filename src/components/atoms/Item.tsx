@@ -1,25 +1,13 @@
 import React from 'react';
+import { Article } from '~/redux/NewsSlice';
 
-type ItemType = {
-  item: {
-    category: object;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    revisedAt: string;
-    id: string;
-    title: string;
-  } | null
-}
-
-const Item: React.FC<ItemType> = ({item}) => {
-  if(!item) {
+const Item: React.FC<Article> = (props) => {
+  if (!props) {
     return <p>No data!</p>;
   }
-  return(
-    <li key={item.id}>
-      <a href={`/news/${item.id}`}>{item.title}</a>
+  return (
+    <li key={props.title}>
+      <a href={props.url}>{props.title}</a>
     </li>
   );
 };

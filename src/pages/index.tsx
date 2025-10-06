@@ -6,12 +6,12 @@ import { NewsBlock } from '@/components/molecules/NewsBlock';
 import Btn from '~/src/components/atoms/Button';
 import { ImgList } from '~/resource/ImgList';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement } from '~/redux/CountSlice';
-import { selectCount } from '~/redux/CountSlice';
+import { increment, decrement } from '~/redux/CounterSlice';
+import { selectCount } from '~/redux/CounterSlice';
 
 const Home: React.FC = () => {
-  const count = useSelector(selectCount)
-  const dispatch = useDispatch()
+  const count = useSelector(selectCount);
+  const dispatch = useDispatch();
 
   return (
     <>

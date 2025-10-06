@@ -1,50 +1,65 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { client } from '~/libs/client';
-
-type NewsItem = {
-  category: object;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  revisedAt: string;
-  id: string;
+export type Article = {
+  source: Source;
+  author: string;
   title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
 };
 
-type DateType = NewsItem[];
+type Source = {
+  id: string | null;
+  name: string;
+};
+
+type ArticleList = Article[];
 
 type Props = {
-  news: DateType | [];
-  error: boolean;
+  articles: ArticleList | [];
+  status: 'ok' | 'error';
+  totalResults: number;
 };
 
-export const getNews = createAsyncThunk<DateType, void>(
+// redux-thunk
+export const getNews = createAsyncThunk<ArticleList, void>(
   'news/getNews',
   async () => {
-    const data = await client.get<NewsItem>({ endpoint: 'news' });
-    return data.contents as DateType;
+    // apiを叩く
+    const res = await fetch(
+      'https://newsapi.org/v2/everything?q=tesla&from=2025-09-06&sortBy=publishedAt&apiKey=1bd713e3c3034a7aade270be5fe9cc77'
+    );
+    const data = (await res.json()) as { articles: ArticleList };
+    return data.articles;
   }
 );
 
 const initialState: Props = {
-  news: [],
-  error: false,
+  articles: [],
+  status: 'error',
+  totalResults: 0,
 };
 
+// redux
 const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getNews.fulfilled, (state, action: PayloadAction<DateType>) => {
-        state.news = action.payload;
-      })
+      .addCase(
+        getNews.fulfilled,
+        (state, action: PayloadAction<ArticleList>) => {
+          state.articles = action.payload;
+          state.status = 'ok';
+        }
+      )
       .addCase(getNews.rejected, (state) => {
-        state.error = true;
+        state.status = 'error';
       });
   },
 });

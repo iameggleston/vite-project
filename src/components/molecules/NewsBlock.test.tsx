@@ -2,43 +2,38 @@ import { configureStore } from '@reduxjs/toolkit';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { screen, render } from '@testing-library/react';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
+// We mock fetch directly instead of using MSW to avoid polyfill issues in Jest
 import { Provider } from 'react-redux';
 
 import { NewsBlock } from '@/components/molecules/NewsBlock';
 
 import newsReducer from '~/redux/NewsSlice';
+beforeEach(() => {
+  // Mock global.fetch to return a successful News API-like response
+  (global as any).fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      articles: [
+        {
+          source: { id: null, name: 'Example' },
+          author: 'Author',
+          title: 'test',
+          description: 'desc',
+          url: 'https://example.com',
+          urlToImage: 'https://example.com/img.jpg',
+          publishedAt: '2025-10-06T00:00:00Z',
+          content: 'content',
+        },
+      ],
+    }),
+  });
+});
 
-const server = setupServer(
-  rest.get('https://plusdesign.microcms.io/api/v1/news', (_req, res, ctx) => {
-    // statusと実際返されるjsonを指定できる
-    return res(
-      ctx.status(200),
-      ctx.json({
-        contents: [
-          {
-            category: {},
-            content: 'test',
-            createdAt: 'test',
-            updatedAt: 'test',
-            publishedAt: 'test',
-            revisedAt: 'test',
-            id: 'test',
-            title: 'test',
-          },
-        ],
-      })
-    );
-  })
-);
-
-beforeAll(() => server.listen());
 afterEach(() => {
-  server.resetHandlers();
+  // Reset mocks and cleanup DOM
+  jest.resetAllMocks();
   cleanup();
 });
-afterAll(() => server.close());
 
 describe('Redux Async API Mocking', () => {
   // test用のstoreを定義
